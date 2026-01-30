@@ -48,7 +48,7 @@ const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
   entities: [User, Invoice, Event],
-  extra: process.env.DATABASE_URL?.includes('localhost') ? {} : getSSLConfig()
+  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : getSSLConfig()
 })
 
 export const getDataSource = async () => {
