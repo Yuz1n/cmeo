@@ -1,29 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 1. Configuração para Next.js 15+
+  // ADICIONE ESTA LINHA:
+  // Isso impede que o Next.js tente empacotar o TypeORM e o Postgres, 
+  // permitindo que eles acessem recursos nativos do Node (como __dirname)
   serverExternalPackages: ["typeorm", "pg"],
-  
-  // 2. Configuração de compatibilidade para Next.js 13/14
-  experimental: {
-    serverComponentsExternalPackages: ["typeorm", "pg"],
-  },
-
-  // 3. Solução Nuclear: Define __dirname manualmente no build do Webpack
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.ignoreWarnings = [{ module: /node_modules/ }];
-      
-      // Isso engana bibliotecas que buscam por __dirname
-      config.plugins.push(
-        new (require("webpack").DefinePlugin)({
-          "global.GENTLY": false,
-          __dirname: JSON.stringify(process.cwd()),
-        })
-      );
-    }
-    return config;
-  },
 
   async redirects() {
     return [
