@@ -1,3 +1,4 @@
+import "@/lib/polyfill";
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { User } from "@/entities/User"
@@ -5,15 +6,6 @@ import { Invoice } from "@/entities/Invoice"
 import { Event } from "@/entities/Event"
 import * as fs from "fs"
 import * as path from "path"
-
-// --- INÍCIO DO PATCH ---
-// Isso força a existência do __dirname no ambiente Serverless da Vercel
-// Deve ficar antes da criação do DataSource
-const globalAny: any = global;
-if (typeof globalAny.__dirname === "undefined") {
-  globalAny.__dirname = process.cwd();
-}
-// --- FIM DO PATCH ---
 
 const getSSLConfig = () => {
   const caCertContent = process.env.DB_CA_CERT_CONTENT
