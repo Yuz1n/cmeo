@@ -11,7 +11,7 @@ async function decrypt(input: string): Promise<any> {
   return payload;
 }
 
-export async function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const cookie = request.cookies.get("session")?.value;
   const session = cookie ? await decrypt(cookie) : null;
   const { pathname } = request.nextUrl;
@@ -40,5 +40,4 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // ADICIONEI '/' AQUI PARA O MIDDLEWARE RODAR NA HOME
   matcher: ["/", "/dashboard/:path*", "/portal/:path*"],
-  runtime: "nodejs",
 };
