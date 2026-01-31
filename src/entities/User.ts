@@ -1,9 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
-
-export enum UserRole {
-  ADMIN = "admin",
-  USER = "user",
-}
+import { UserRole } from "@/lib/enums";
 
 @Entity("users") // Nome da tabela no banco
 export class User {

@@ -1,10 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm";
 import { User } from "./User";
-
-export enum InvoiceStatus {
-  PENDING = "PENDING",     // Pendente de pagamento
-  PAID = "PAID",           // Pago (usuário enviou comprovante)
-}
+import { InvoiceStatus } from "@/lib/enums";
 
 @Entity("invoices")
 export class Invoice {
