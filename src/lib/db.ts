@@ -20,26 +20,6 @@ const getSSLConfig = () => {
       rejectUnauthorized: true
     }
   }
-
-  // Fallback: tenta usar arquivos (para desenvolvimento local)
-  const caCertPath = process.env.DB_CA_CERT
-  const clientCertPath = process.env.DB_CLIENT_CERT
-  const clientKeyPath = process.env.DB_CLIENT_KEY
-
-  if (caCertPath && clientCertPath && clientKeyPath &&
-      fs.existsSync(path.resolve(caCertPath)) &&
-      fs.existsSync(path.resolve(clientCertPath)) &&
-      fs.existsSync(path.resolve(clientKeyPath))) {
-    return {
-      ca: fs.readFileSync(path.resolve(caCertPath)),
-      cert: fs.readFileSync(path.resolve(clientCertPath)),
-      key: fs.readFileSync(path.resolve(clientKeyPath)),
-      rejectUnauthorized: true
-    }
-  } else {
-    // Fallback para desenvolvimento ou quando certificados não estão disponíveis
-    return { rejectUnauthorized: false }
-  }
 }
 
 const AppDataSource = new DataSource({
