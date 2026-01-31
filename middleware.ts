@@ -16,17 +16,12 @@ export default async function middleware(request: NextRequest) {
   const session = cookie ? await decrypt(cookie) : null;
   const { pathname } = request.nextUrl;
 
-  // 1. Regra de Redirecionamento da Home
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  // 2. Proteção de rotas do Dashboard
+  // Proteção de rotas do Dashboard
   if (!session && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // 3. Proteção de rotas de Admin
+  // Proteção de rotas de Admin
   if (
     session?.role === "user" && 
     pathname.startsWith("/dashboard/admin")
@@ -38,6 +33,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // ADICIONEI '/' AQUI PARA O MIDDLEWARE RODAR NA HOME
-  matcher: ["/", "/dashboard/:path*", "/portal/:path*"],
+  matcher: ["/dashboard/:path*", "/portal/:path*"],
 };
