@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server.js";
 import type { NextRequest } from "next/server.js";
-import { decrypt } from "@/lib/session";
+import { decrypt } from "./src/lib/session";
 
 export async function middleware(request: NextRequest) {
   const cookie = request.cookies.get("session")?.value;
