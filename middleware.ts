@@ -1,32 +1,42 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-// IMPORTAÇÃO SEGURA: Só usamos o arquivo isolado
-import { verifySession } from "@/lib/auth-edge";
+import { jwtVerify } from "jose";
+
+// --- LÓGICA INTERNA (Sem importações externas) ---
+const secret = process.env.JWT_SECRET || "secret_padrao_troque_isso";
+const key = new TextEncoder().encode(secret);
+
+async function verifySession(token: string) {
+  try {
+    const { payload } = await jwtVerify(token, key, {
+      algorithms: ["HS256"],
+    });
+    return payload;
+  } catch (error) {
+    return null;
+  }
+}
+// ------------------------------------------------
 
 export default async function middleware(request: NextRequest) {
-  // 1. Tenta pegar o cookie de sessão
   const cookie = request.cookies.get("session")?.value;
-  
-  // 2. Verifica a sessão usando a função isolada
   const session = cookie ? await verifySession(cookie) : null;
-  
   const { pathname } = request.nextUrl;
 
-  // 3. Regras de Proteção
   const isDashboard = pathname.startsWith("/dashboard");
   const isLoginPage = pathname === "/login";
 
-  // Se tentar acessar dashboard sem logar -> Manda pro Login
+  // 1. Proteger Dashboard (Se não logado -> Login)
   if (isDashboard && !session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Se já estiver logado e tentar ir pro Login -> Manda pro Dashboard
+  // 2. Redirecionar Login (Se já logado -> Dashboard)
   if (isLoginPage && session) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // Se for user comum tentando acessar admin -> Manda pro Dashboard
+  // 3. Proteger Admin (Se user comum -> Dashboard)
   if (session && (session as any).role === "user" && pathname.startsWith("/dashboard/admin")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
@@ -35,6 +45,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Otimização: Ignora arquivos estáticos para não rodar middleware à toa
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
