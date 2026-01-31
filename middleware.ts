@@ -16,11 +16,6 @@ export default async function middleware(request: NextRequest) {
   const session = cookie ? await decrypt(cookie) : null;
   const { pathname } = request.nextUrl;
 
-  // Redirecionamento da Home
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
   // Proteção de rotas do Dashboard
   if (!session && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", request.url));
