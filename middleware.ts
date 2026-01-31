@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server.js";
 import type { NextRequest } from "next/server.js";
-import { decrypt } from "./src/lib/session";
+import { jwtVerify } from "jose";
+
+const key = new TextEncoder().encode(process.env.JWT_SECRET || "secret_padrao_troque_isso");
+
+async function decrypt(input: string): Promise<any> {
+  const { payload } = await jwtVerify(input, key, {
+    algorithms: ["HS256"],
+  });
+  return payload;
+}
 
 export async function middleware(request: NextRequest) {
   const cookie = request.cookies.get("session")?.value;
