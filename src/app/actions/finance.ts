@@ -1,7 +1,8 @@
 'use server'
 
 import { getDataSource } from "@/lib/db";
-import { Invoice, InvoiceStatus } from "@/entities/Invoice";
+import { Invoice } from "@/entities/Invoice";
+import { InvoiceStatus } from "@/lib/enums";
 import { uploadToR2 } from "@/lib/r2";
 import { revalidatePath } from "next/cache";
 
