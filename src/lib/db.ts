@@ -6,8 +6,16 @@ import { Event } from "@/entities/Event"
 import * as fs from "fs"
 import * as path from "path"
 
+// --- INÍCIO DO PATCH ---
+// Isso força a existência do __dirname no ambiente Serverless da Vercel
+// Deve ficar antes da criação do DataSource
+const globalAny: any = global;
+if (typeof globalAny.__dirname === "undefined") {
+  globalAny.__dirname = process.cwd();
+}
+// --- FIM DO PATCH ---
+
 const getSSLConfig = () => {
-  // Primeiro, tenta usar o conteúdo dos certificados (para Vercel)
   const caCertContent = process.env.DB_CA_CERT_CONTENT
   const clientCertContent = process.env.DB_CLIENT_CERT_CONTENT
   const clientKeyContent = process.env.DB_CLIENT_KEY_CONTENT
@@ -20,15 +28,40 @@ const getSSLConfig = () => {
       rejectUnauthorized: true
     }
   }
+
+  // Fallback para desenvolvimento local
+  const caCertPath = process.env.DB_CA_CERT
+  const clientCertPath = process.env.DB_CLIENT_CERT
+  const clientKeyPath = process.env.DB_CLIENT_KEY
+
+  if (caCertPath && clientCertPath && clientKeyPath) {
+    // Verificação de segurança simples para evitar erro de leitura
+    try {
+        const resolvedCa = path.resolve(process.cwd(), caCertPath);
+        if (fs.existsSync(resolvedCa)) {
+            return {
+                ca: fs.readFileSync(resolvedCa),
+                cert: fs.readFileSync(path.resolve(process.cwd(), clientCertPath)),
+                key: fs.readFileSync(path.resolve(process.cwd(), clientKeyPath)),
+                rejectUnauthorized: true
+            }
+        }
+    } catch (e) {
+        console.warn("Certificados locais não encontrados, ignorando SSL estrito.");
+    }
+  }
+  
+  return { rejectUnauthorized: false }
 }
 
 const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
-  synchronize: true,
+  synchronize: true, // Cuidado: Em produção idealmente deve ser false
   logging: false,
   entities: [User, Invoice, Event],
-  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : getSSLConfig()
+  // Ajuste fino para evitar erro de SSL em localhost vs prod
+  ssl: process.env.NODE_ENV === 'production' ? getSSLConfig() : false
 })
 
 export const getDataSource = async () => {
