@@ -1,7 +1,7 @@
 'use server'
 
 import { getDataSource } from "@/lib/db"
-import { User } from "@/src/entities/User"
+import { User } from "@/entities/User"
 import { revalidatePath } from "next/cache"
 
 export async function createUser(formData: FormData) {

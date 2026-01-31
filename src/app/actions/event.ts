@@ -1,8 +1,8 @@
 'use server'
 
 import { getDataSource } from "@/lib/db";
-import { Event } from "@/src/entities/Event";
-import { User } from "@/src/entities/User";
+import { Event } from "@/entities/Event";
+import { User } from "@/entities/User";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/session";
 

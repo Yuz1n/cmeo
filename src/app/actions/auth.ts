@@ -2,7 +2,7 @@
 import { compare } from "bcryptjs";
 import { createSession, getSession } from "@/lib/session";
 import { getDataSource } from "@/lib/db"
-import { User } from "@/src/entities/User"
+import { User } from "@/entities/User"
 import { hash } from "bcryptjs"
 import { redirect } from "next/navigation"
 import { v4 as uuidv4 } from 'uuid';

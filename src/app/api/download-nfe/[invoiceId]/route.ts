@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/session";
 import { getDataSource } from "@/lib/db";
-import { Invoice } from "@/src/entities/Invoice";
+import { Invoice } from "@/entities/Invoice";
 import { NextRequest, NextResponse } from "next/server";
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from "@aws-sdk/node-http-handler";

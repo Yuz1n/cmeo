@@ -1,9 +1,9 @@
 'use server'
 
 import { getDataSource } from "@/lib/db";
-import { Invoice, InvoiceStatus } from "@/src/entities/Invoice";
+import { Invoice, InvoiceStatus } from "@/entities/Invoice";
 import { createSession, getSession } from "@/lib/session";
-import { User } from "@/src/entities/User";
+import { User } from "@/entities/User";
 import { revalidatePath } from "next/cache";
 import { uploadToR2 } from "@/lib/r2";
 

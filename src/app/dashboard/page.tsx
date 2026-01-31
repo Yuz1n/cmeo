@@ -1,8 +1,8 @@
 import { getSession } from "@/lib/session";
 import { getDataSource } from "@/lib/db";
-import { Invoice } from "@/src/entities/Invoice";
-import { User } from "@/src/entities/User";
-import { Event } from "@/src/entities/Event";
+import { Invoice } from "@/entities/Invoice";
+import { User } from "@/entities/User";
+import { Event } from "@/entities/Event";
 import { redirect } from "next/navigation";
 import { CreateInvoiceForm } from "./create-invoice-form";
 import { AdminNfeUpload } from "./admin-nfe-upload";

@@ -1,8 +1,8 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { User } from "@/src/entities/User"
-import { Invoice } from "@/src/entities/Invoice"
-import { Event } from "@/src/entities/Event"
+import { User } from "@/entities/User"
+import { Invoice } from "@/entities/Invoice"
+import { Event } from "@/entities/Event"
 import * as fs from "fs"
 import * as path from "path"
 

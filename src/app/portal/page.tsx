@@ -1,9 +1,9 @@
 import { getSession } from "@/lib/session";
 import { getDataSource } from "@/lib/db";
-import { Invoice } from "@/src/entities/Invoice";
+import { Invoice } from "@/entities/Invoice";
 import { redirect } from "next/navigation";
 import { UploadReceiptForm } from "./upload-form"; // Vamos criar esse componente abaixo
-import { Event } from "@/src/entities/Event"; // Importar
+import { Event } from "@/entities/Event"; // Importar
 import { DownloadButton } from "./download-button";
 
 export default async function UserPortal() {
